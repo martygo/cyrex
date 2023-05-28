@@ -1,0 +1,17 @@
+{
+	"name": "cyrex",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"start": "node ./dist/app.js",
+		"dev": "npx nodemon ./src/app.ts",
+		"build": "tsc -p ."
+	},
+	"devDependencies": {
+		"@types/node": "^20.2.5",
+		"nodemon": "^2.0.22",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.0.4"
+	}
+}

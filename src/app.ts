@@ -30,7 +30,22 @@ if (fs.existsSync(DIRECTORY)) {
 						`${DIRECTORY}/${file}`,
 						`${DIRECTORY}/${fileName}/${fileName}.${fileExtension}`,
 					);
+
+					console.log(
+						`File ${file} moved to ${DIRECTORY}/${fileName}`,
+					);
 				}
+			});
+
+			filesNames.forEach((folder) => {
+				fs.renameSync(
+					`${DIRECTORY}/${folder}/${folder}.html`,
+					`${DIRECTORY}/${folder}/index.html`,
+				);
+
+				console.log(
+					`File ${folder}.html moved to ${DIRECTORY}/${folder}/index.html`,
+				);
 			});
 		} catch (error) {
 			console.log("Error reading files", error);

@@ -1,7 +1,9 @@
 {
 	"name": "cyrex",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "app.js",
+	"author": "Martins Gouveia",
+	"description": "Cyrex is a package for create clean URL structures to static site generators.",
 	"license": "MIT",
 	"scripts": {
 		"start": "node ./dist/app.js",

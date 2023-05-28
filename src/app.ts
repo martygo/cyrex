@@ -16,6 +16,10 @@ if (fs.existsSync(DIRECTORY)) {
 					filesNames.push(file);
 				}
 			});
+
+			filesNames.forEach((folder) => {
+				fs.mkdirSync(`${DIRECTORY}/${folder}`);
+			});
 		} catch (error) {
 			console.log("Error reading files", error);
 		}
@@ -24,5 +28,3 @@ if (fs.existsSync(DIRECTORY)) {
 	console.log("Folder 'dist' doesn't exist");
 	process.exit(1);
 }
-
-console.log(filesNames);

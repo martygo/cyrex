@@ -20,6 +20,18 @@ if (fs.existsSync(DIRECTORY)) {
 			filesNames.forEach((folder) => {
 				fs.mkdirSync(`${DIRECTORY}/${folder}`);
 			});
+
+			files.forEach((file) => {
+				if (file.includes(".html")) {
+					const fileName = file.split(".")[0];
+					const fileExtension = file.split(".")[1];
+
+					fs.renameSync(
+						`${DIRECTORY}/${file}`,
+						`${DIRECTORY}/${fileName}/${fileName}.${fileExtension}`,
+					);
+				}
+			});
 		} catch (error) {
 			console.log("Error reading files", error);
 		}

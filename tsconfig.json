@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-		"target": "es2016",
-		"module": "commonjs",
-		"baseUrl": "./src",
-		"allowJs": true,
-		"sourceMap": true,
-		"outDir": "./dist",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"strict": true,
-		"skipDefaultLibCheck": true,
-		"skipLibCheck": true
-	}
+    "target": "es2017",
+    "module": "commonjs",
+    "baseUrl": "./src",
+    "allowJs": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
+  }
 }

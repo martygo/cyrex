@@ -1,57 +1,54 @@
-import fs from "fs";
+import fs from 'fs'
+import chalk from 'chalk'
+import ProgressBar from 'progress'
 
-const DIRECTORY = "dist";
+import { queue } from './lib/queue'
+import { environment } from './lib/environment'
+import { isFileOnDir } from './utils/isFileOnDir'
+import { fetchContentsOfDir } from './fetchContentsOfDir'
+import { getHtmlFileProperties, isHtml } from './utils/isHtml'
 
-let filesNames: string[] = [];
+const progressBar = new ProgressBar('Processing [:bar] :current/:total', {
+  total: 0, // Will be updated dynamically
+  width: 20,
+})
 
-if (fs.existsSync(DIRECTORY)) {
-	if (fs.readdirSync(DIRECTORY).length != 0) {
-		try {
-			const files = fs.readdirSync(DIRECTORY);
+if (!fs.existsSync(environment.PATH_DIRECTORY)) {
+  console.log(
+    chalk.red(
+      `[CYREX-ERROR]: Folder '${environment.PATH_DIRECTORY}' doesn't exist`,
+    ),
+  )
+  process.exit(1)
+}
 
-			files.forEach((file) => {
-				if (file.includes(".html")) {
-					file = file.split(".")[0];
+if (!isFileOnDir(environment.PATH_DIRECTORY)) {
+  console.log(
+    chalk.blue(`[CYREX-INFO]: Folder '${environment.PATH_DIRECTORY}' is empty`),
+  )
+  process.exit(1)
+}
 
-					filesNames.push(file);
-				}
-			});
+try {
+  const files = fetchContentsOfDir()
 
-			filesNames.forEach((folder) => {
-				fs.mkdirSync(`${DIRECTORY}/${folder}`);
-			});
+  progressBar.total = files.length
 
-			files.forEach((file) => {
-				if (file.includes(".html")) {
-					const fileName = file.split(".")[0];
-					const fileExtension = file.split(".")[1];
+  files.forEach((file) => {
+    // TODO: add cache and history registry to validate files ever processed
+    if (!isHtml(file)) {
+      console.log(
+        chalk.blue(
+          `[CYREX-INFO]: Don't have changes to trait, please rebuild to generate updates`,
+        ),
+      )
+      process.exit(1)
+    }
 
-					fs.renameSync(
-						`${DIRECTORY}/${file}`,
-						`${DIRECTORY}/${fileName}/${fileName}.${fileExtension}`,
-					);
-
-					console.log(
-						`File ${file} moved to ${DIRECTORY}/${fileName}`,
-					);
-				}
-			});
-
-			filesNames.forEach((folder) => {
-				fs.renameSync(
-					`${DIRECTORY}/${folder}/${folder}.html`,
-					`${DIRECTORY}/${folder}/index.html`,
-				);
-
-				console.log(
-					`File ${folder}.html moved to ${DIRECTORY}/${folder}/index.html`,
-				);
-			});
-		} catch (error) {
-			console.log("Error reading files", error);
-		}
-	}
-} else {
-	console.log("Folder 'dist' doesn't exist");
-	process.exit(1);
+    const { fileName, fileExtention } = getHtmlFileProperties(file)
+    queue.push({ fileName, fileExtention })
+    progressBar.tick()
+  })
+} catch (error) {
+  console.log(chalk.red('[CYREX-ERROR]Error reading files', error))
 }
